@@ -1,5 +1,5 @@
 ---
-- name: Install Redmine to latest version
+- name: Upgrade Redmine to latest version
   hosts: D-baseimage
   vars_files:
     - vars/main.yml
@@ -22,12 +22,25 @@
       - libpq-dev
       - libmagickwand-dev
       - libsqlite3-dev
+      - python-mysqldb
 
   - name: Clone repository
-    git: repo=https://github.com/redmine/redmine.git dest="{{ redmine_path }}" version='{{ redmine_version }}' accept_hostkey=yes
+    git: repo=https://github.com/redmine/redmine.git\
+         dest="{{ redmine_path }}" version='{{ redmine_version }}'\
+         accept_hostkey=yes
+
+  - name: Backup database
+    mysql_db: name="{{ db_name }}" login_host="{{ db_host }}" \
+              login_user="{{ db_username }}" \
+              login_password="{{ db_password }}" \
+              state=dump target="{{ target_dump }}"
+
+  - name: Backup files
+    
 
   - name: Config database
-    template: src=templates/database.yml.j2 dest="{{ redmine_path }}/config/database.yml"
+    template: src=templates/database.yml.j2 \
+              dest="{{ redmine_path }}/config/database.yml"
 
   - name: Install Bundler
     shell: "gem install bundler"
