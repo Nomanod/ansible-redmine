@@ -1,0 +1,20 @@
+---
+db_host: '127.0.0.1'
+db_name: 'redmine'
+db_username: 'admin'
+db_password: 'unaContrasenia'
+target_dump: '/opt/redmine.sql.bz2'
+target_files: '/opt/redmine.tar.bz2'
+redmine_path: '/opt/redmine-git'
+
+mysql_port: 3306
+mysql_bind_addres: "0.0.0.0"
+mysql_root_password: "dificil"
+mysql_databases:
+ - name: '{{ db_name }}'
+mysql_users:
+ - name: '{{ db_username }}'
+   pass: '{{ db_password }}'
+   priv: "{{ db_name}}.*:ALL"
+
+redmine_version: "2.5.2"

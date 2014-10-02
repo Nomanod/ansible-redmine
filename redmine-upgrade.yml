@@ -1,0 +1,55 @@
+---
+- name: Install Redmine to latest version
+  hosts: D-baseimage
+  vars_files:
+    - vars/main.yml
+  roles:
+     - { 
+     role: ANXS.mysql
+      }
+
+  tasks:
+  - name: Package pre-requisites
+    apt: name={{ item }} state=latest
+    with_items:
+      - git
+      - imagemagick
+      - ruby-openid
+      - ruby
+      - build-essential
+      - ruby-dev
+      - libmysqlclient-dev
+      - libpq-dev
+      - libmagickwand-dev
+      - libsqlite3-dev
+
+  - name: Clone repository
+    git: repo=https://github.com/redmine/redmine.git dest="{{ redmine_path }}" version='{{ redmine_version }}' accept_hostkey=yes
+
+  - name: Config database
+    template: src=templates/database.yml.j2 dest="{{ redmine_path }}/config/database.yml"
+
+  - name: Install Bundler
+    shell: "gem install bundler"
+    args:
+     chdir: "{{ redmine_path }}"
+
+  - name: Dependencies installation
+    shell: bundle install --without development test
+    args:
+     chdir: "{{ redmine_path }}"
+
+  - name: Session store secret generation
+    shell: rake generate_secret_token
+    args:
+     chdir: "{{ redmine_path }}"
+
+  - name: Database schema objects creation
+    shell: RAILS_ENV=production rake db:migrate
+    args:
+     chdir: "{{ redmine_path }}"
+
+  - name: Database default data set
+    shell: RAILS_ENV=production REDMINE_LANG=es rake redmine:load_default_data
+    args:
+     chdir: "{{ redmine_path }}"
