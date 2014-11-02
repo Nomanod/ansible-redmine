@@ -53,21 +53,17 @@ This role is for install mysql and you must configure this vars
 Example Playbook
 ----------------
 
-https://gist.github.com/adeb2e0c32720528cfc6
+[ Gist install](https://gist.github.com/adeb2e0c32720528cfc6)
 
 	---
 	- name: Install version 2.5.2
 	  hosts: Ansible
 	  roles:
-	  - { role: redmine, mysql_root_password: "dificil", db_host: "127.0.0.1", db_name: "redmine", db_username: "admin", db_password: "unaContrasenia", redmine_version: "2.5.2" }
+	  - { role: redmine, mysql_root_password: "dificil", db_host:
+        "127.0.0.1", db_name: "redmine", db_username: "admin",
+        db_password: "unaContrasenia", redmine_version: "2.5.2" }
 
-	- name: Install version 2.5.2
-      hosts: Ansible
-      roles:
-      - { role: redmine, redmine_version: "2.5.2" }
-
-
-https://gist.github.com/fc4bebdddf4a2813afdf
+[Gist update](https://gist.github.com/fc4bebdddf4a2813afdf)
 
 	---
 	- name: Update to last version
