@@ -12,64 +12,76 @@ To Install:
 Role Variables
 --------------
 
+To install set up this:
 
-You must set the databases variable
+	mysql_port: 3306
+	mysql_bind_addres: "0.0.0.0"
+	mysql_root_password: "dificil"
 
----
-db_host: "127.0.0.1"
-db_name: "redmine"
-db_username: "admin"
-db_password: "unaContrasenia"
-
-
-
-redmine_domain: "name.domain"
-redmine_files: "{{ redmine_path }}/files"
-redmine_lang: "es"
-redmine_path: "/opt/redmine"
-redmine_proxy: "/etc/nginx/conf.d/redmine_proxy"
-redmine_public: "{{ redmine_path }}/public"
-redmine_version: "2.5.2"
-
-target_dump: "/opt/redmine.sql.bz2"
-target_files: "/opt/redmine.tar.bz2"
-
-ssl_cert: "/etc/ssl/local/server.crt"
-ssl_key: "/etc/ssl/local/server.key"
+	db_host: "127.0.0.1"
+	db_name: "redmine"
+	db_username: "admin"
+	db_password: "unaContrasenia"
 
 
-update: false
-nginx: false
+You also have the option to configure these:
 
+	redmine_domain: "name.domain"
+	redmine_files: "{{ redmine_path }}/files"
+	redmine_lang: "es"
+	redmine_path: "/opt/redmine"
+	redmine_proxy: "/etc/nginx/conf.d/redmine_proxy"
+	redmine_public: "{{ redmine_path }}/public"
+	redmine_version: "2.5.2"
+	target_dump: "/opt/redmine.sql.bz2"
+	target_files: "/opt/redmine.tar.bz2"
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+update: Put this true if you have and old version of redmine
+nginx: Put this true if you have nginx installed
 
 Dependencies
 ------------
 
+This role is for install mysql and you must configure this vars 
+
 - ANXS.mysql
 
-mysql_port: 3306
-mysql_bind_addres: "0.0.0.0"
-mysql_root_password: "dificil"
-mysql_databases:
- - name: "{{ db_name }}"
-mysql_users:
- - name: "{{ db_username }}"
-   pass: "{{ db_password }}"
-   priv: "{{ db_name }}.*:ALL"
-
+		mysql_port: 3306
+		mysql_bind_addres: "0.0.0.0"
+		mysql_root_password: "dificil"
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+https://gist.github.com/adeb2e0c32720528cfc6
 
-    - hosts: servers
+	---
+	- name: Install version 2.5.2
+	  hosts: Ansible
+	  roles:
+	  - { role: redmine, mysql_root_password: "dificil", db_host: "127.0.0.1", db_name: "redmine", db_username: "admin", db_password: "unaContrasenia", redmine_version: "2.5.2" }
+
+	- name: Install version 2.5.2
+      hosts: Ansible
       roles:
-         - { role: username.rolename, x: 42 }
+      - { role: redmine, redmine_version: "2.5.2" }
+
+
+https://gist.github.com/fc4bebdddf4a2813afdf
+
+	---
+	- name: Update to last version
+	  hosts: Ansible
+	  roles:
+    - { role: redmine,  update: true, db_name: "redmine", db_username: "admin", db_password: "unaContrasenia"}
+
 
 License
 -------
 
 GPLv3
+
+Author Information
+------------------
+
+Comments are welcome
