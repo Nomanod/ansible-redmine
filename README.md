@@ -1,22 +1,64 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Install or Upgrade redmine
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+To Install:
+- ANXS.mysql
 
 Role Variables
 --------------
+
+
+You must set the databases variable
+
+---
+db_host: "127.0.0.1"
+db_name: "redmine"
+db_username: "admin"
+db_password: "unaContrasenia"
+
+
+
+redmine_domain: "name.domain"
+redmine_files: "{{ redmine_path }}/files"
+redmine_lang: "es"
+redmine_path: "/opt/redmine"
+redmine_proxy: "/etc/nginx/conf.d/redmine_proxy"
+redmine_public: "{{ redmine_path }}/public"
+redmine_version: "2.5.2"
+
+target_dump: "/opt/redmine.sql.bz2"
+target_files: "/opt/redmine.tar.bz2"
+
+ssl_cert: "/etc/ssl/local/server.crt"
+ssl_key: "/etc/ssl/local/server.key"
+
+
+update: false
+nginx: false
+
 
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- ANXS.mysql
+
+mysql_port: 3306
+mysql_bind_addres: "0.0.0.0"
+mysql_root_password: "dificil"
+mysql_databases:
+ - name: "{{ db_name }}"
+mysql_users:
+ - name: "{{ db_username }}"
+   pass: "{{ db_password }}"
+   priv: "{{ db_name }}.*:ALL"
+
 
 Example Playbook
 ----------------
@@ -30,9 +72,4 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+GPLv3

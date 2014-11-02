@@ -1,2 +1,93 @@
 ---
-# tasks file for redmine-install
+- name: Package pre-requisites
+  apt: name={{ item }} state=latest
+  with_items:
+    - git
+    - imagemagick
+    - ruby-openid
+    - ruby
+    - build-essential
+    - ruby-dev
+    - libmysqlclient-dev
+    - libpq-dev
+    - libmagickwand-dev
+    - libsqlite3-dev
+
+- name: Backup database
+  mysql_db: name="{{ db_name }}" login_host="{{ db_host }}" \
+            login_user="{{ db_username }}" \
+            login_password="{{ db_password }}" \
+            state=dump target="{{ target_dump }}"
+  when: update
+    
+- name: Clone repository
+  git: repo=git@github.com:redmine/redmine.git dest="{{ redmine_path }}" version='{{ redmine_version }}' accept_hostkey=yes
+
+- name: Config database
+  template: src=templates/database.yml.j2 dest="{{ redmine_path }}/config/database.yml"
+  when: not update
+  
+- name: Install Bundler
+  shell: "gem install bundler"
+  args:
+    chdir: "{{ redmine_path }}"
+  when: not update
+  
+- name: Update Dependencies
+  shell: bundle update
+  args:
+    chdir: "{{ redmine_path }}"
+  when: update
+
+- name: Migrate database
+  shell: bundle exec rake db:migrate RAILS_ENV=production 
+  args:
+    chdir: "{{ redmine_path }}"
+  when: update
+
+- name: Migrate plugins
+  shell: bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+  args:
+    chdir: "{{ redmine_path }}"
+  when: update
+  
+- name: Dependencies installation
+  shell: bundle install --without development test
+  args:
+    chdir: "{{ redmine_path }}"
+  when: not update
+  
+- name: Session store secret generation
+  shell: rake generate_secret_token
+  args:
+   chdir: "{{ redmine_path }}"
+  when: not update
+  
+- name: Database schema objects creation
+  shell: RAILS_ENV=production rake db:migrate
+  args:
+   chdir: "{{ redmine_path }}"
+  when: not update
+  
+- name: Database default data set
+  shell: RAILS_ENV=production REDMINE_LANG="{{ redmine_lang }}" rake redmine:load_default_data
+  args:
+   chdir: "{{ redmine_path }}"
+  when: not update
+
+- name: Clean up
+  shell: bundle exec rake tmp:cache:clear
+  args:
+    chdir: "{{ redmine_path }}"
+  shell: bundle exec rake tmp:sessions:clear
+  args:
+    chdir: "{{ redmine_path }}"
+
+
+- name: Copiar Proxy
+  copy: src=proxy dest="{{ redmine_proxy }}"
+  when: nginx
+
+- name: Configurar sitio
+  template: src=site.j2 dest="/etc/nginx/sites-available/redmine"
+  when: nginx
