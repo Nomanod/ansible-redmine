@@ -21,7 +21,7 @@
   when: update
     
 - name: Clone repository
-  git: repo=git@github.com:redmine/redmine.git dest="{{ redmine_path }}" version='{{ redmine_version }}' accept_hostkey=yes
+  git: repo=https://github.com/redmine/redmine.git dest="{{ redmine_path }}" version='{{ redmine_version }}' accept_hostkey=yes
 
 - name: Config database
   template: src=database.yml.j2 dest="{{ redmine_path }}/config/database.yml"
