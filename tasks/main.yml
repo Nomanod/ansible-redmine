@@ -61,8 +61,10 @@
   shell: rake generate_secret_token
   args:
    chdir: "{{ redmine_path }}"
+   creates: "{{ redmine_path }}/config/initializers/secret_token.rb"
   when: not update
   
+# rails migrations are (supposed to be) idempotent
 - name: Database schema objects creation
   shell: RAILS_ENV=production rake db:migrate
   args:
@@ -73,7 +75,7 @@
   shell: RAILS_ENV=production REDMINE_LANG="{{ redmine_lang }}" rake redmine:load_default_data
   args:
    chdir: "{{ redmine_path }}"
-  when: not update
+  when: not update and redmine_load_default_data|default(false)
 
 - name: Clean up
   shell: bundle exec rake tmp:cache:clear
