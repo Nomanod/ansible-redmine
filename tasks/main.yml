@@ -1,17 +1,10 @@
 ---
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
 - name: Package pre-requisites
   apt: name={{ item }} state=latest
-  with_items:
-    - git
-    - imagemagick
-    - ruby-openid
-    - ruby
-    - build-essential
-    - ruby-dev
-    - libmysqlclient-dev
-    - libpq-dev
-    - libmagickwand-dev
-    - libsqlite3-dev
+  with_items: "{{ packages }}"
 
 - name: Backup database
   mysql_db: name="{{ db_name }}" login_host="{{ db_host }}" \

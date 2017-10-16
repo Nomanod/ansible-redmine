@@ -1,0 +1,9 @@
+packages:
+  - git
+  - imagemagick
+  - ruby-openid
+  - ruby
+  - build-essential
+  - ruby-dev
+  - libmagickwand-dev
+  - libmysqlclient-dev
