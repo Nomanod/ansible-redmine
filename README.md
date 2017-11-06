@@ -78,6 +78,12 @@ License
 
 GPLv3
 
+Contributors
+-------------
+
+- [Alexander Vynnyk](https://github.com/cosmonaut-ok)
+- [Joonas Kylmälä](https://github.com/kirjastojk)
+
 Author Information
 ------------------
 
