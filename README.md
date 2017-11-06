@@ -37,6 +37,7 @@ You also have the option to configure these:
 	target_files: "/opt/redmine.tar.bz2"
 
 update: Put this true if you have and old version of redmine
+
 nginx: Put this true if you have nginx installed
 
 Dependencies
