@@ -70,10 +70,12 @@
    chdir: "{{ redmine_path }}"
   when: not update and redmine_load_default_data|default(false)
 
-- name: Clean up
+- name: Clean up cache
   shell: bundle exec rake tmp:cache:clear
   args:
     chdir: "{{ redmine_path }}"
+
+- name: Clean up sessions
   shell: bundle exec rake tmp:sessions:clear
   args:
     chdir: "{{ redmine_path }}"
