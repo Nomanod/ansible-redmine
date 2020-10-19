@@ -21,7 +21,7 @@
   when: not update
   
 - name: Install Bundler
-  shell: "gem install bundler"
+  shell: "gem install bundler --version {{ redmine_bundler_version }}"
   args:
     chdir: "{{ redmine_path }}"
   when: not update
