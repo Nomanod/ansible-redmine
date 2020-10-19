@@ -4,7 +4,7 @@ galaxy_info:
   description: "Install and Upgrade redmine"
   company: Nomanod
   license: GPLv3
-  min_ansible_version: 1.7
+  min_ansible_version: 2.5
   platforms:
   - name: Ubuntu
     versions:

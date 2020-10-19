@@ -3,8 +3,7 @@
   include_vars: "{{ ansible_distribution }}.yml"
 
 - name: Package pre-requisites
-  apt: name={{ item }} state=latest
-  with_items: "{{ packages }}"
+  apt: name="{{ packages }}" state=latest
 
 - name: Backup database
   mysql_db: name="{{ db_name }}" login_host="{{ db_host }}" \
@@ -79,7 +78,7 @@
   shell: bundle exec rake tmp:sessions:clear
   args:
     chdir: "{{ redmine_path }}"
-  when: redmine_version is version_compare('4.0', '<')
+  when: redmine_version is version('4.0', '<')
 
 
 - name: Copiar Proxy
