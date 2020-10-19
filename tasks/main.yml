@@ -79,6 +79,7 @@
   shell: bundle exec rake tmp:sessions:clear
   args:
     chdir: "{{ redmine_path }}"
+  when: redmine_version is version_compare('4.0', '<')
 
 
 - name: Copiar Proxy

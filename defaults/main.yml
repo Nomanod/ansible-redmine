@@ -22,7 +22,7 @@ redmine_files: "{{ redmine_path }}/files"
 #redmine_path: "/opt/redmine"
 redmine_proxy: "/etc/nginx/conf.d/redmine_proxy"
 redmine_public: "{{ redmine_path }}/public"
-redmine_version: "3.1.7"
+redmine_version: "4.1.1"
 redmine_bundler_version: "1.17.3"
 
 target_dump: "/opt/redmine.sql.bz2"
