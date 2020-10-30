@@ -86,6 +86,7 @@ Contributors
 
 - [Alexander Vynnyk](https://github.com/cosmonaut-ok)
 - [Joonas Kylmälä](https://github.com/kirjastojk)
+- [Teemu Kekkonen](https://github.com/teemukoo)
 
 Author Information
 ------------------
