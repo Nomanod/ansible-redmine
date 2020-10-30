@@ -33,12 +33,15 @@ You also have the option to configure these:
 	redmine_proxy: "/etc/nginx/conf.d/redmine_proxy"
 	redmine_public: "{{ redmine_path }}/public"
 	redmine_version: "2.5.2"
+	redmine_bundler_version: "1.17.3"
 	target_dump: "/opt/redmine.sql.bz2"
 	target_files: "/opt/redmine.tar.bz2"
 
 update: Put this true if you have and old version of redmine
 
 nginx: Put this true if you have nginx installed
+
+redmine\_bundler\_version: This specifies the Bundler version. It should be set to a version that is compatible with the given Redmine version. For example, older Redmine versions do not work with Bundler 2.x.
 
 Dependencies
 ------------

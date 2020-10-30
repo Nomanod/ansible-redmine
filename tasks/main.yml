@@ -3,8 +3,7 @@
   include_vars: "{{ ansible_distribution }}.yml"
 
 - name: Package pre-requisites
-  apt: name={{ item }} state=latest
-  with_items: "{{ packages }}"
+  apt: name="{{ packages }}" state=latest
 
 - name: Backup database
   mysql_db: name="{{ db_name }}" login_host="{{ db_host }}" \
@@ -21,7 +20,7 @@
   when: not update
   
 - name: Install Bundler
-  shell: "gem install bundler"
+  shell: "gem install bundler --version {{ redmine_bundler_version }}"
   args:
     chdir: "{{ redmine_path }}"
   when: not update
@@ -70,13 +69,16 @@
    chdir: "{{ redmine_path }}"
   when: not update and redmine_load_default_data|default(false)
 
-- name: Clean up
+- name: Clean up cache
   shell: bundle exec rake tmp:cache:clear
   args:
     chdir: "{{ redmine_path }}"
+
+- name: Clean up sessions
   shell: bundle exec rake tmp:sessions:clear
   args:
     chdir: "{{ redmine_path }}"
+  when: redmine_version is version('4.0', '<')
 
 
 - name: Copiar Proxy

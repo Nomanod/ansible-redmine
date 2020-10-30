@@ -6,4 +6,4 @@ packages:
   - build-essential
   - ruby-dev
   - libmagickwand-dev
-  - "{{ 'libmariadbclient-dev' if ansible_distribution_version | version_compare('9', '>=') else 'libmysqlclient-dev' }}"
+  - "{{ 'libmariadbclient-dev' if ansible_distribution_version is version('9', '>=') else 'libmysqlclient-dev' }}"
